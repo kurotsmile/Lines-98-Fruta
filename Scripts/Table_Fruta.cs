@@ -1,6 +1,4 @@
 ﻿using Carrot;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -509,5 +507,10 @@ public class Table_Fruta : MonoBehaviour
     public Furta get_f_select()
     {
         return this.f_change;
+    }
+
+    public void Change_list_icon_fruta(Sprite[] list_sp_new)
+    {
+        this.sp_icon_fruta= list_sp_new;
     }
 }

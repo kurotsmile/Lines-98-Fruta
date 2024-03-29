@@ -5,7 +5,11 @@ using UnityEngine.UI;
 
 public class Game_Handle : MonoBehaviour
 {
+    [Header("Obj Main")]
     public Carrot.Carrot carrot;
+    public Game_Shop shop;
+
+    [Header("Obj Game")]
     public Table_Fruta table_fruta;
     public GameObject panel_gameplay;
     public GameObject panel_gamemain;
@@ -174,5 +178,12 @@ public class Game_Handle : MonoBehaviour
         this.hight_timer = PlayerPrefs.GetFloat("hight_timer", 0);
         this.txt_main_hight_timer.text = this.table_fruta.FormatTime(this.hight_timer);
         this.txt_gameover_hight_timer.text = this.table_fruta.FormatTime(this.hight_timer);
+    }
+
+    public void Btn_show_Shop()
+    {
+        carrot.ads.show_ads_Interstitial();
+        carrot.play_sound_click();
+        shop.Show();
     }
 }
