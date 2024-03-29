@@ -1,5 +1,6 @@
 using Carrot;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,8 +16,9 @@ public class Game_Shop : MonoBehaviour
     private Carrot_Box box_category = null;
     private Carrot_Box box_icon = null;
     private string s_name_categroy_temp = "";
-    private Sprite[] list_icon_temp;
-    private int length_icon = 6;
+    private IList<Sprite> list_icon_temp;
+    private readonly int length_icon = 6;
+
     public void On_load()
     {
         if (this.game.carrot.is_offline())
@@ -149,7 +151,7 @@ public class Game_Shop : MonoBehaviour
 
         if (!fc.is_null)
         {
-            this.list_icon_temp = new Sprite[6];
+            this.list_icon_temp = new List<Sprite>();
             this.game.carrot.hide_loading();
             this.box_icon = this.game.carrot.show_grid();
             this.box_icon.set_title(this.s_name_categroy_temp);
@@ -164,23 +166,51 @@ public class Game_Shop : MonoBehaviour
                 if (sp_icon != null)
                 {
                     item_icon.set_icon_white(sp_icon);
-                    this.list_icon_temp[i]= sp_icon;
+                    this.list_icon_temp.Add(sp_icon);
                 }
                 else
                 {
-                    if (icon_data["icon"] != null) this.game.carrot.get_img_and_save_playerPrefs(icon_data["icon"].ToString(), item_icon.img_icon, icon_data["id"].ToString());
+                    if (icon_data["icon"] != null) this.game.carrot.get_img_and_save_playerPrefs(icon_data["icon"].ToString(), item_icon.img_icon, icon_data["id"].ToString(), Add_pic_to_list);
                 }
                 item_icon.set_act(() => this.Select_icon_for_table());
             }
         }
     }
 
+    private void Add_pic_to_list(Texture2D tex)
+    {
+        this.list_icon_temp.Add(game.carrot.get_tool().Texture2DtoSprite(tex));
+    }
+
     private void Select_icon_for_table()
     {
-        this.game.table_fruta.Change_list_icon_fruta(this.list_icon_temp);
+        this.game.table_fruta.Change_list_icon_fruta(this.Convert_list_sp());
         this.game.carrot.play_sound_click();
         if (box_category != null) box_category.close();
         if(box_icon!=null) box_icon.close();
     }
 
+    private Sprite[] Convert_list_sp()
+    {
+        Sprite[] list_sp = new Sprite[this.list_icon_temp.Count];
+        for(int i = 0; i < this.list_icon_temp.Count; i++)
+        {
+            list_sp[i] = this.list_icon_temp[i];
+        }
+        return list_sp;
+    }
+
+    public void OnPaySuccess(string s_id)
+    {
+        if (this.s_id_category_buy_temp != "")
+        {
+            if (s_id ==game.carrot.shop.get_id_by_index(this.index_buy_category_icon))
+            {
+                game.carrot.Show_msg("Shop", "Successfully purchased icon set, You can use this collection into the game!", Msg_Icon.Success);
+                PlayerPrefs.SetInt("is_buy_category_icon_" + this.s_id_category_buy_temp, 1);
+                this.View_list_icon_by_category_key(this.s_id_category_buy_temp);
+                this.s_id_category_buy_temp = "";
+            }
+        }
+    }
 }

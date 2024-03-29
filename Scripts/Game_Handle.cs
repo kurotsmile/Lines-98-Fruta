@@ -31,6 +31,7 @@ public class Game_Handle : MonoBehaviour
     void Start()
     {
         this.carrot.Load_Carrot(this.check_exit_app);
+        this.carrot.shop.onCarrotPaySuccess += shop.OnPaySuccess;
 
         this.panel_gamemain.SetActive(true);
         this.panel_gameplay.SetActive(true);

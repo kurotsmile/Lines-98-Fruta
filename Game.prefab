@@ -1596,6 +1596,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   game: {fileID: 2059287532987828196}
+  index_buy_category_icon: 2
 --- !u!1 &1509816253821940147
 GameObject:
   m_ObjectHideFlags: 0
