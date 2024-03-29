@@ -72,7 +72,7 @@ public class Table_Fruta : MonoBehaviour
     {
         this.is_play = false;
         this.game.carrot.play_sound_click();
-        this.msg = this.game.carrot.show_msg("Play again", "Are you sure to reset the game and start over?", act_reset_yes, act_reset_no);
+        this.msg = this.game.carrot.Show_msg("Play again", "Are you sure to reset the game and start over?", act_reset_yes, act_reset_no);
         this.msg.UI.get_list_btn()[2].gameObject.SetActive(false);
     }
 
