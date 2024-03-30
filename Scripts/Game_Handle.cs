@@ -36,8 +36,10 @@ public class Game_Handle : MonoBehaviour
         this.panel_gamemain.SetActive(true);
         this.panel_gameplay.SetActive(true);
         this.panel_gameover.SetActive(false);
-        
+
+        shop.On_load();
         table_fruta.load(this);
+
         this.update_graphic();
         this.update_and_show_hight_scores();
         this.update_and_show_hight_timer();
