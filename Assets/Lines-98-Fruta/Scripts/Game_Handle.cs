@@ -8,6 +8,7 @@ public class Game_Handle : MonoBehaviour
     [Header("Obj Main")]
     public Carrot.Carrot carrot;
     public Game_Shop shop;
+    public IronSourceAds ads;
 
     [Header("Obj Game")]
     public Table_Fruta table_fruta;
@@ -31,7 +32,12 @@ public class Game_Handle : MonoBehaviour
     void Start()
     {
         this.carrot.Load_Carrot(this.check_exit_app);
-        this.carrot.shop.onCarrotPaySuccess += shop.OnPaySuccess;
+        carrot.shop.onCarrotPaySuccess += shop.OnPaySuccess;
+        carrot.act_after_delete_all_data = Start;
+
+        ads.On_Load();
+        carrot.game.act_click_watch_ads_in_music_bk = this.ads.ShowRewardedVideo;
+        ads.onRewardedSuccess += carrot.game.OnRewardedSuccess;
 
         this.panel_gamemain.SetActive(true);
         this.panel_gameplay.SetActive(true);
@@ -66,7 +72,7 @@ public class Game_Handle : MonoBehaviour
             this.btn_back_home();
             this.carrot.set_no_check_exit_app();
         }
-        else if(this.panel_gameover.activeInHierarchy)
+        else if (this.panel_gameover.activeInHierarchy)
         {
             this.btn_back_home();
             this.carrot.set_no_check_exit_app();
@@ -75,7 +81,7 @@ public class Game_Handle : MonoBehaviour
 
     public void btn_play_now()
     {
-        this.carrot.ads.show_ads_Interstitial();
+        this.ads.show_ads_Interstitial();
         this.carrot.play_sound_click();
         this.panel_gamemain.SetActive(false);
         this.table_fruta.reset();
@@ -83,23 +89,23 @@ public class Game_Handle : MonoBehaviour
 
     public void btn_show_setting()
     {
-        this.carrot.ads.show_ads_Interstitial();
-        Carrot_Box box_setting= this.carrot.Create_Setting();
+        this.ads.show_ads_Interstitial();
+        Carrot_Box box_setting = this.carrot.Create_Setting();
         box_setting.set_act_before_closing(act_after_close_setting);
     }
 
     private void act_after_close_setting(List<string> item_change)
     {
-        foreach(string s in item_change)
+        foreach (string s in item_change)
         {
-            if(s== "list_bk_music") this.carrot.game.load_bk_music(this.sounds[4]);
+            if (s == "list_bk_music") this.carrot.game.load_bk_music(this.sounds[4]);
         }
-        this.carrot.ads.show_ads_Interstitial();
+        this.ads.show_ads_Interstitial();
     }
 
     public void btn_gamereplay()
     {
-        this.carrot.ads.show_ads_Interstitial();
+        this.ads.show_ads_Interstitial();
         this.carrot.play_sound_click();
         this.panel_gameover.SetActive(false);
         this.table_fruta.reset();
@@ -107,7 +113,7 @@ public class Game_Handle : MonoBehaviour
 
     public void btn_back_home()
     {
-        this.carrot.ads.show_ads_Interstitial();
+        this.ads.show_ads_Interstitial();
         this.table_fruta.stop();
         this.carrot.play_sound_click();
         this.panel_gamemain.SetActive(true);
@@ -116,7 +122,7 @@ public class Game_Handle : MonoBehaviour
 
     public void show_gameover()
     {
-        this.carrot.ads.show_ads_Interstitial();
+        this.ads.show_ads_Interstitial();
         this.table_fruta.stop();
         int your_scores = this.table_fruta.get_scores();
         float your_timer = this.table_fruta.get_timer();
@@ -140,7 +146,7 @@ public class Game_Handle : MonoBehaviour
         this.panel_gameover.SetActive(true);
     }
 
-    public void create_effect(Vector3 pos,int index_effect = 0)
+    public void create_effect(Vector3 pos, int index_effect = 0)
     {
         GameObject effect_obj = Instantiate(this.effect_prefab[index_effect]);
         effect_obj.transform.SetParent(this.panel_gameplay.transform);
@@ -149,7 +155,7 @@ public class Game_Handle : MonoBehaviour
         Destroy(effect_obj, 1f);
     }
 
-    public void play_sound(int index_sound=0)
+    public void play_sound(int index_sound = 0)
     {
         if (this.carrot.get_status_sound()) this.sounds[index_sound].Play();
     }
@@ -173,7 +179,7 @@ public class Game_Handle : MonoBehaviour
     {
         this.hight_scores = PlayerPrefs.GetInt("hight_scores", 0);
         this.txt_gameover_hight_scores.text = this.hight_scores.ToString();
-        this.txt_main_hight_scores.text= this.hight_scores.ToString();
+        this.txt_main_hight_scores.text = this.hight_scores.ToString();
     }
 
     private void update_and_show_hight_timer()
@@ -185,7 +191,7 @@ public class Game_Handle : MonoBehaviour
 
     public void Btn_show_Shop()
     {
-        carrot.ads.show_ads_Interstitial();
+        ads.show_ads_Interstitial();
         carrot.play_sound_click();
         shop.Show();
     }
